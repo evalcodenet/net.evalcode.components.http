@@ -1,6 +1,9 @@
 <?php
 
 
+namespace Components;
+
+
   /**
    * Http_Exception_Wrapper
    *
@@ -12,7 +15,7 @@
   class Http_Exception_Wrapper extends Http_Exception
   {
     // CONSTRUCTION
-    public function __construct(Exception $e_)
+    public function __construct(\Exception $e_)
     {
       parent::__construct(parent::DEFAULT_NAMESPACE, $e_->getMessage(), parent::DEFAULT_ERROR_CODE, array(), $e_);
 
@@ -45,7 +48,7 @@
 
     // IMPLEMENTATION
     /**
-     * @var Exception
+     * @var \Exception
      */
     private $m_exception;
     //--------------------------------------------------------------------------

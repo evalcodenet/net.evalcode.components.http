@@ -1,6 +1,9 @@
 <?php
 
 
+namespace Components;
+
+
   /**
    * Http_Exception
    *
@@ -129,6 +132,9 @@
         header(self::$m_mapHttpErrorCodes[$this->code], true, $this->code);
       else
         header(self::DEFAULT_MESSAGE, true, $this->code);
+
+      if(Runtime::isManagementAccess() && Debug::enabled() && Debug::appendToHeaders())
+        header('Component-Exception: '.$this->message);
     }
 
     public function getFriendlyMessage()

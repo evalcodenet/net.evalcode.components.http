@@ -1,6 +1,9 @@
 <?php
 
 
+namespace Components;
+
+
   /**
    * Http_Scriptlet_Response
    *
@@ -83,7 +86,7 @@
       return null!==self::$m_exception;
     }
 
-    public static function setException(Exception $exception_)
+    public static function setException(\Exception $exception_)
     {
       self::$m_exception=$exception_;
     }
@@ -96,7 +99,7 @@
     private static $m_parameters=array();
     private static $m_content='';
     /**
-     * @var Http_Exception
+     * @var \Exception
      */
     private static $m_exception;
     /**

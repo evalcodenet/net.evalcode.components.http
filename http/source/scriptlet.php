@@ -12,7 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  abstract class Http_Scriptlet
+  abstract class Http_Scriptlet implements Object
   {
     // ACCESSORS/MUTATORS
     public function dispatch(array $parameters_)
@@ -28,6 +28,27 @@ namespace Components;
       }
 
       throw new Http_Exception('http/scriptlet', 'Illegal request - method not implemented.');
+    }
+    //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    public function equals($object_)
+    {
+      if($object_ instanceof self)
+        return $this->hashCode()===$object_->hashCode();
+
+      return false;
+    }
+
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    public function __toString()
+    {
+      return sprintf('%s@%s{}', __CLASS__, $this->hashCode());
     }
     //--------------------------------------------------------------------------
   }

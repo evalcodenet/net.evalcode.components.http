@@ -15,9 +15,14 @@ namespace Components;
   class Http_Exception_Wrapper extends Http_Exception
   {
     // CONSTRUCTION
-    public function __construct(\Exception $e_)
+    public function __construct(\Exception $e_, $logEnabled_=true)
     {
-      parent::__construct(parent::DEFAULT_NAMESPACE, $e_->getMessage(), parent::DEFAULT_ERROR_CODE, array(), $e_);
+      if($e_ instanceof Runtime_Exception || $e_ instanceof Runtime_ErrorException)
+        $namespace=$e_->getNamespace();
+      else
+        $namespace=parent::DEFAULT_NAMESPACE;
+
+      parent::__construct($namespace, $e_->getMessage(), parent::DEFAULT_ERROR_CODE, array(), $e_, $logEnabled_);
 
       $this->m_exception=$e_;
     }
@@ -33,11 +38,17 @@ namespace Components;
       return $this->m_exception->getTrace();
     }
 
+    public function log()
+    {
+      if($this->m_logEnabled)
+        Log::error($this->m_namespace, $this->message);
+    }
+
     public function __toString()
     {
       return sprintf('%1$s@%2$s{namespace: %3$s, message: %4$s, code: %5$s}',
-        get_class($this->m_exception),
-        spl_object_hash($this->m_exception),
+        __CLASS__,
+        $this->hashCode(),
         $this->getNamespace(),
         $this->getMessage(),
         $this->code

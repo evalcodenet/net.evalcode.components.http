@@ -29,7 +29,11 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
+    /**
+     * (non-PHPdoc)
+     * @see Components.Http_Exception::getStackTrace()
+     */
     public function getStackTrace($asString_=false)
     {
       if($asString_)
@@ -38,12 +42,20 @@ namespace Components;
       return $this->m_exception->getTrace();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Components.Runtime_Exception::log()
+     */
     public function log()
     {
       if($this->m_logEnabled)
         Log::error($this->m_namespace, $this->message);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Components.Object::__toString()
+     */
     public function __toString()
     {
       return sprintf('%1$s@%2$s{namespace: %3$s, message: %4$s, code: %5$s}',

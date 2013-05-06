@@ -47,7 +47,12 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
+    /**
+     * @param \Components\Io_MimeType $mimeType_
+     *
+     * @return string
+     */
     public function to(Io_MimeType $mimeType_)
     {
       if(isset(self::$m_mapMimeTypeSerializers[$mimeType_->name()]))
@@ -56,6 +61,9 @@ namespace Components;
       return $this->__toString();
     }
 
+    /**
+     * @return string
+     */
     public function toJson()
     {
       return json_encode(array(
@@ -68,6 +76,9 @@ namespace Components;
       ));
     }
 
+    /**
+     * @return string
+     */
     public function toXml()
     {
       // TODO Embed stack trace.
@@ -88,6 +99,9 @@ namespace Components;
       );
     }
 
+    /**
+     * @return string
+     */
     public function toHtml()
     {
       return sprintf('<?xml encoding="utf-8" version="1.0"?>%6$s
@@ -113,11 +127,19 @@ namespace Components;
       );
     }
 
+    /**
+     * @return string
+     */
     public function toString()
     {
       return (string)$this;
     }
 
+    /**
+     * @param boolean $asString_
+     *
+     * @return mixed
+     */
     public function getStackTrace($asString_=false)
     {
       if($asString_)
@@ -137,6 +159,9 @@ namespace Components;
         header('Component-Exception: '.$this->message);
     }
 
+    /**
+     * @return string
+     */
     public function getFriendlyMessage()
     {
       if(isset(self::$m_mapHttpErrorCodes[$this->code]))
@@ -147,12 +172,37 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
+    /**
+     * (non-PHPdoc)
+     * @see Components.Object::equals()
+     */
+    public function equals($object_)
+    {
+      if($object_ instanceof self)
+        return $this->hashCode()===$object_->hashCode();
+
+      return false;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see Components.Object::hashCode()
+     */
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see Components.Object::__toString()
+     */
     public function __toString()
     {
-      return sprintf('%1$s@%2$s{namespace: %3$s, message: %4$s, code: %5$s}',
-        get_class($this),
-        spl_object_hash($this),
+      return sprintf('%s@%s{namespace: %s, message: %s, code: %s}',
+        __CLASS__,
+        object_hash($this),
         $this->getNamespace(),
         $this->getMessage(),
         $this->code

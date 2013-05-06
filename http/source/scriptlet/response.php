@@ -8,15 +8,16 @@ namespace Components;
    * Http_Scriptlet_Response
    *
    * @package net.evalcode.components
-   * @subpackage http
+   * @subpackage http.scriptlet
    *
    * @author evalcode.net
    */
+  // TODO Proper scriptlet context implementation.
   class Http_Scriptlet_Response
   {
     // STATIC ACCESSORS
     /**
-     * @return Io_MimeType
+     * @return \Components\Io_MimeType
      */
     public static function getMimeType()
     {
@@ -24,7 +25,7 @@ namespace Components;
     }
 
     /**
-     * @param Io_MimeType $mimeType_
+     * @param \Components\Io_MimeType $mimeType_
      */
     public static function setMimeType(Io_MimeType $mimeType_)
     {
@@ -103,7 +104,7 @@ namespace Components;
      */
     private static $m_exception;
     /**
-     * @var Io_MimeType
+     * @var \Components\Io_MimeType
      */
     private static $m_mimeType;
     //--------------------------------------------------------------------------

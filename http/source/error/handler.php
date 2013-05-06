@@ -14,7 +14,7 @@ namespace Components;
    */
   class Http_Error_Handler implements Runtime_Error_Handler
   {
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
     /**
      * (non-PHPdoc)
      * @see Components.Runtime_Error_Handler::onError()

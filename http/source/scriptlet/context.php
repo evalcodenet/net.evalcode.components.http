@@ -12,7 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Http_Scriptlet_Context extends Stack implements Object
+  class Http_Scriptlet_Context implements Object
   {
     // CONSTRUCTION
     public function __construct($contextRoot_='/')
@@ -29,7 +29,39 @@ namespace Components;
      */
     public static function current()
     {
-      return static::head();
+      return self::$m_current;
+    }
+
+    /**
+     * @param \Components\Http_Scriptlet_Context $context_
+     *
+     * @return \Components\Http_Scriptlet_Context
+     */
+    public static function push(Http_Scriptlet_Context $context_)
+    {
+      if(null!==self::$m_current)
+        array_push(self::$m_stack, self::$m_current);
+
+      self::$m_current=$context_;
+      self::$m_count++;
+
+      return $context_;
+    }
+
+    /**
+     * @return \Components\Http_Scriptlet_Context
+     */
+    public static function pop()
+    {
+      $current=self::$m_current;
+
+      if(0<self::$m_count)
+      {
+        self::$m_current=array_pop(self::$m_stack);
+        self::$m_count--;
+      }
+
+      return $current;
     }
     //--------------------------------------------------------------------------
 
@@ -65,12 +97,12 @@ namespace Components;
       }
       else
       {
-        $e->log();
-        $e->sendHeader();
+        $exception->log();
+        $exception->sendHeader();
 
         ob_flush();
 
-        echo $e->to($this->m_response->getMimeType());
+        echo $exception->to($this->m_response->getMimeType());
       }
 
       if(session_id())
@@ -137,6 +169,19 @@ namespace Components;
 
 
     // IMPLEMENTATION
+    /**
+     * @var array|\Components\Http_Scriptlet_Context
+     */
+    private static $m_stack=array();
+    /**
+     * @var integer
+     */
+    private static $m_count=0;
+    /**
+     * @var \Components\Http_Scriptlet_Context
+     */
+    private static $m_current;
+
     /**
      * @var string
      */

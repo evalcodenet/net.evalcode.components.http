@@ -27,12 +27,15 @@ namespace Components;
 
 
     // STATIC ACCESSORS
-    public static function serve($pattern_)
+    public static function serve($pattern_, $scriptlet_=null)
     {
-      if('/'===$pattern_)
-        self::$m_default=get_called_class();
+      if(null===$scriptlet_)
+        $scriptlet_=get_called_class();
+
+      if(null===$pattern_)
+        self::$m_default=$scriptlet_;
       else
-        self::$m_routes[str_replace('/', '\\/', $pattern_)]=get_called_class();
+        self::$m_routes['/^'.str_replace('/', '\\/', $pattern_).'$/i']=$scriptlet_;
     }
     //--------------------------------------------------------------------------
 
@@ -52,7 +55,7 @@ namespace Components;
           foreach(self::$m_routes as $pattern=>$scriptlet)
           {
             $matches=array();
-            if(1===preg_match("/^$pattern$/i", $path, $matches))
+            if(1===preg_match($pattern, $path, $matches))
             {
               $uri_->setPathParams($params);
               foreach($segments as $segment)

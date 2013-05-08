@@ -21,18 +21,14 @@ namespace Components;
      */
     public function onError(Runtime_ErrorException $e_)
     {
-      if(Runtime::isManagementAccess() && Debug::enabled() && Debug::appendToHeaders())
-        header('Component-Exception: '.$e_->getMessage());
+      if($response=Http_Scriptlet_Context::current()->getResponse())
+      {
+        $response->setException(new Http_Exception_Wrapper($e_));
 
-      if(Environment::isLive())
-        return false;
+        return true;
+      }
 
-      $mimeType=Http_Scriptlet_Response::getMimeType();
-      header('Content-Type: '.$mimeType->name().';charset='.$mimeType->charset()->name());
-
-      Http_Scriptlet_Response::setException(new Http_Exception_Wrapper($e_));
-
-      return true;
+      return false;
     }
 
     /**

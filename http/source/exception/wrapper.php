@@ -20,9 +20,9 @@ namespace Components;
       if($e_ instanceof Runtime_Exception || $e_ instanceof Runtime_ErrorException)
         $namespace=$e_->getNamespace();
       else
-        $namespace=parent::DEFAULT_NAMESPACE;
+        $namespace=Http_Exception::DEFAULT_NAMESPACE;
 
-      parent::__construct($namespace, $e_->getMessage(), parent::DEFAULT_ERROR_CODE, array(), $e_, $logEnabled_);
+      parent::__construct($namespace, Http_Exception::INTERNAL_SERVER_ERROR, $e_->getMessage(), array(), $e_, $logEnabled_);
 
       $this->m_exception=$e_;
     }

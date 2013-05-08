@@ -12,22 +12,81 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  abstract class Http_Scriptlet implements Object
+  class Http_Scriptlet implements Object
   {
-    // ACCESSORS
-    public function dispatch(array $parameters_)
+    // PROPERTIES
+    /**
+     * @var \Components\Http_Scriptlet_Request
+     */
+    public $request;
+    /**
+     * @var \Components\Http_Scriptlet_Response
+     */
+    public $response;
+    //--------------------------------------------------------------------------
+
+
+    // STATIC ACCESSORS
+    public static function serve($pattern_)
     {
-      $method=isset($_SERVER['REQUEST_METHOD'])?strtolower($_SERVER['REQUEST_METHOD']):'get';
+      if('/'===$pattern_)
+        self::$m_default=get_called_class();
+      else
+        self::$m_routes[str_replace('/', '\\/', $pattern_)]=get_called_class();
+    }
+    //--------------------------------------------------------------------------
 
-      if(method_exists($this, $method))
+
+    // ACCESSORS
+    public static function dispatch(Http_Scriptlet_Context $context_, Uri $uri_)
+    {
+      if(__CLASS__===get_called_class())
       {
-        if(count($parameters_))
-          return call_user_func_array(array($this, $method), $parameters_);
+        $segments=$uri_->getPathParams(true);
+        $count=count($segments);
 
-        return $this->{$method}();
+        $params=array();
+        for($i=$count; 0<$i; $i--)
+        {
+          $path=implode('/', $segments);
+          foreach(self::$m_routes as $pattern=>$scriptlet)
+          {
+            $matches=array();
+            if(1===preg_match("/^$pattern$/i", $path, $matches))
+            {
+              $uri_->setPathParams($params);
+              foreach($segments as $segment)
+                $context_->getContextUri()->pushPathParam($segment);
+
+              $scriptlet::dispatch($context_, $uri_);
+
+              return;
+            }
+          }
+
+          array_unshift($params, array_pop($segments));
+        }
+
+        if(null!==($scriptlet=self::$m_default))
+        {
+          $scriptlet::dispatch($context_, $uri_);
+
+          return;
+        }
+      }
+      else
+      {
+        $scriptlet=new static();
+        $scriptlet->request=$context_->getRequest();
+        $scriptlet->response=$context_->getResponse();
+
+        $method=$scriptlet->request->getMethod();
+
+        if(method_exists($scriptlet, strtolower($method)))
+          return $scriptlet->$method();
       }
 
-      throw new Http_Exception('http/scriptlet', 'Illegal request - method not implemented.');
+      throw new Http_Exception('components/http/scriptlet', Http_Exception::NOT_FOUND);
     }
     //--------------------------------------------------------------------------
 
@@ -62,6 +121,12 @@ namespace Components;
     {
       return sprintf('%s@%s{}', __CLASS__, $this->hashCode());
     }
+    //--------------------------------------------------------------------------
+
+
+    // IMPLEMENTATION
+    private static $m_default;
+    private static $m_routes=array();
     //--------------------------------------------------------------------------
   }
 ?>

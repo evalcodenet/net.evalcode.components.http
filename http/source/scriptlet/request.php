@@ -12,40 +12,93 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Http_Scriptlet_Request
+  class Http_Scriptlet_Request implements Object
   {
-    // STATIC ACCESSORS
+    // PREDEFINED PROPERTIES
+    const METHOD_DELETE='DELETE';
+    const METHOD_GET='GET';
+    const METHOD_HEAD='HEAD';
+    const METHOD_OPTIONS='OPTIONS';
+    const METHOD_POST='POST';
+    const METHOD_PUT='PUT';
+    //--------------------------------------------------------------------------
+
+
+    // CONSTRUCTION
+    public function __construct(Uri $uri_)
+    {
+      $this->m_uri=$uri_;
+      $this->m_params=new HashMap($_REQUEST);
+    }
+    //--------------------------------------------------------------------------
+
+
+    // ACCESSORS/MUTATORS
     /**
      * @return \Components\Io_MimeType
      */
-    public static function getMimeType()
+    public function getMimeType()
     {
-      if(null===self::$m_mimeType)
+      if(null===$this->m_mimeType)
       {
-        if(isset($_SERVER['REQUEST_URI']))
-          self::$m_mimeType=Io_MimeType::forFileName($_SERVER['REQUEST_URI']);
-
-        if(!self::$m_mimeType)
-          self::$m_mimeType=Io_MimeType::TEXT_HTML(Io_Charset::UTF_8());
+        if(!$this->m_mimeType=Io_MimeType::forFileName($this->m_uri->getPath()))
+          $this->m_mimeType=Io_MimeType::TEXT_HTML(Io_Charset::UTF_8());
       }
 
-      return self::$m_mimeType;
+      return $this->m_mimeType;
     }
 
     /**
      * @return \Components\Uri
      */
-    public static function getUri()
+    public function getUri()
     {
-      if(null===self::$m_uri)
-      {
-        if(isset($_SERVER['REQUEST_URI']))
-          self::$m_uri=Uri::valueOf($_SERVER['REQUEST_URI']);
-        else
-          self::$m_uri=Uri::createEmpty();
-      }
+      return $this->m_uri;
+    }
 
-      return self::$m_uri;
+    /**
+     * @return \Components\HashMap
+     */
+    public function getParams()
+    {
+      return $this->m_params;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+      if(isset($_SERVER['REQUEST_METHOD']))
+        return strtoupper($_SERVER['REQUEST_METHOD']);
+
+      return self::METHOD_GET;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    public function equals($object_)
+    {
+      if($object_ instanceof self)
+        return $this->hashCode()===$object_->hashCode();
+
+      return false;
+    }
+
+    public function __toString()
+    {
+      return sprintf('%s@%s{uri: %s, mimeType: %s}',
+        __CLASS__,
+        $this->hashCode(),
+        $this->m_uri,
+        $this->m_mimeType
+      );
     }
     //--------------------------------------------------------------------------
 
@@ -54,11 +107,15 @@ namespace Components;
     /**
      * @var \Components\Io_MimeType
      */
-    private static $m_mimeType;
+    private $m_mimeType;
     /**
      * @var \Components\Uri
      */
-    private static $m_uri;
+    private $m_uri;
+    /**
+     * @var \Components\HashMap
+     */
+    private $m_params;
     //--------------------------------------------------------------------------
   }
 ?>

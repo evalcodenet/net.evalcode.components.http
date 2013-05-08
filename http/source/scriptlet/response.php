@@ -12,101 +12,104 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  // TODO Proper scriptlet context implementation.
-  class Http_Scriptlet_Response
+  class Http_Scriptlet_Response implements Object
   {
+    // CONSTRUCTION
+    public function __construct(Io_MimeType $mimeType_)
+    {
+      $this->m_mimeType=$mimeType_;
+    }
+    //--------------------------------------------------------------------------
+
+
     // STATIC ACCESSORS
     /**
      * @return \Components\Io_MimeType
      */
-    public static function getMimeType()
+    public function getMimeType()
     {
-      return self::$m_mimeType;
+      return $this->m_mimeType;
     }
 
     /**
      * @param \Components\Io_MimeType $mimeType_
      */
-    public static function setMimeType(Io_MimeType $mimeType_)
+    public function setMimeType(Io_MimeType $mimeType_)
     {
-      self::$m_mimeType=$mimeType_;
+      $this->m_mimeType=$mimeType_;
     }
 
-    public static function getHeaders()
+    public function getParameters()
     {
-      return self::$m_headers;
+      return $this->m_parameters;
     }
 
-    public static function setHeader($name_, $value_)
+    public function addParameter($name_, $value_)
     {
-      self::$m_headers[$name_]=$value_;
+      $this->m_parameters[$name_]=$value_;
     }
 
-    public static function getContent()
+    /**
+     * @return boolean
+     */
+    public function hasException()
     {
-      return self::$m_content;
+      return null!==$this->m_exception;
     }
 
-    public static function setContent($content_)
+    /**
+     * @return \Components\Http_Exception
+     */
+    public function getException()
     {
-      self::$m_content=$content_;
+      return $this->m_exception;
     }
 
-    public static function addContent($content_)
+    /**
+     * @param \Components\Http_Exception $exception_
+     */
+    public function setException(Http_Exception $exception_)
     {
-      self::$m_content.=$content_;
+      $this->m_exception=$exception_;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    public function hashCode()
+    {
+      return object_hash($this);
     }
 
-    public static function getScripts()
+    public function equals($object_)
     {
-      return self::$m_scripts;
+      if($object_ instanceof self)
+        return $this->hashCode()===$object_->hashCode();
+
+      return false;
     }
 
-    public static function addScript($script_)
+    public function __toString()
     {
-      self::$m_scripts[md5($script_)]=$script_;
-    }
-
-    public static function getParameters()
-    {
-      return self::$m_parameters;
-    }
-
-    public static function addParameter($name_, $value_)
-    {
-      self::$m_parameters[$name_]=$value_;
-    }
-
-    public static function getException()
-    {
-      return self::$m_exception;
-    }
-
-    public static function hasException()
-    {
-      return null!==self::$m_exception;
-    }
-
-    public static function setException(\Exception $exception_)
-    {
-      self::$m_exception=$exception_;
+      return sprintf('%s@%s{mimeType: %s}',
+        __CLASS__,
+        $this->hashCode(),
+        $this->m_mimeType
+      );
     }
     //--------------------------------------------------------------------------
 
 
     // IMPLEMENTATION
-    private static $m_headers=array();
-    private static $m_scripts=array();
-    private static $m_parameters=array();
-    private static $m_content='';
+    private $m_parameters=array();
     /**
-     * @var \Exception
+     * @var \Components\Http_Exception
      */
-    private static $m_exception;
+    private $m_exception;
     /**
      * @var \Components\Io_MimeType
      */
-    private static $m_mimeType;
+    private $m_mimeType;
     //--------------------------------------------------------------------------
   }
 ?>

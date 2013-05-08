@@ -17,14 +17,17 @@ namespace Components;
     // HTTP ERROR CODES
     const FORBIDDEN=403;
     const NOT_FOUND=404;
-    const INTERNAL=500;
+    const INTERNAL_SERVER_ERROR=500;
     //--------------------------------------------------------------------------
 
 
     // PREDEFINED PROPERTIES
-    const DEFAULT_NAMESPACE='runtime/http';
-    const DEFAULT_MESSAGE='Internal Error';
-    const DEFAULT_ERROR_CODE=self::INTERNAL;
+    const MESSAGE_FORBIDDEN='HTTP/1.1 403 Forbidden';
+    const MESSAGE_NOT_FOUND='HTTP/1.1 404 Not Found';
+    const MESSAGE_INTERNAL_SERVER_ERROR='HTTP/1.1 500 Internal Server Error';
+
+    const DEFAULT_NAMESPACE='components/http/exception';
+    const DEFAULT_ERROR_CODE=self::INTERNAL_SERVER_ERROR;
     //--------------------------------------------------------------------------
 
 
@@ -36,9 +39,12 @@ namespace Components;
 
     // CONSTRUCTION
     public function __construct($namespace_=self::DEFAULT_NAMESPACE,
-      $message_=self::DEFAULT_MESSAGE, $code_=self::DEFAULT_ERROR_CODE,
-      array $params_=array(), $cause_=null, $logEnabled_=true)
+      $code_=self::DEFAULT_ERROR_CODE, $message_=null, array $params_=array(),
+      $cause_=null, $logEnabled_=true)
     {
+      if(null===$message_ && isset(self::$m_mapHttpErrorCodes[$code_]))
+        $message_=self::$m_mapHttpErrorCodes[$code_];
+
       parent::__construct($namespace_, $message_, $cause_, $logEnabled_);
 
       $this->code=$code_;
@@ -82,16 +88,15 @@ namespace Components;
     public function toXml()
     {
       // TODO Embed stack trace.
-      return sprintf('<?xml encoding="utf-8" version="1.0"?>%6$s
-        <exception>%6$s
-          <type>%1$s</type>%6$s
-          <code>%2$s</code>%6$s
-          <namespace>%3$s</namespace>%6$s
-          <message>%4$s</message>%6$s
-          <source>%5$s</source>%6$s
+      return sprintf('<?xml version="1.0" encoding="utf-8"?>%6$s<exception>
+          <type>%1$s</type>
+          <code>%2$s</code>
+          <namespace>%3$s</namespace>
+          <message>%4$s</message>
+          <source>%5$s</source>
         </exception>',
           get_class($this),
-          self::$m_mapHttpErrorCodes[$this->code],
+          $this->code,
           $this->getNamespace(),
           $this->getMessage(),
           implode(':', array($this->getFile(), $this->getLine())),
@@ -104,17 +109,14 @@ namespace Components;
      */
     public function toHtml()
     {
-      return sprintf('<?xml encoding="utf-8" version="1.0"?>%6$s
-        <!DOCTYPE HTML>%6$s
-        <html>
+      return sprintf('<?xml encoding="utf-8" version="1.0"?>%6$s<!DOCTYPE HTML>%6$s<html>
           <head>
             <meta charset="utf-8"/>
             <title>[%2$s] %3$s</title>
           </head>
           <body>
-            <h1>%1$s</h1>
-            <h2>[%2$s] %3$s</h2>
-            <h3>%4$s</h3>
+            <h1>[%2$s] %3$s</h1>
+            <h2>%4$s</h2>
             <pre>%5$s</pre>
           </body>
         </html>',
@@ -125,14 +127,6 @@ namespace Components;
           $this->getStackTrace(true),
           PHP_EOL
       );
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-      return (string)$this;
     }
 
     /**
@@ -150,24 +144,9 @@ namespace Components;
 
     public function sendHeader()
     {
-      if(isset(self::$m_mapHttpErrorCodes[$this->code]))
-        header(self::$m_mapHttpErrorCodes[$this->code], true, $this->code);
-      else
-        header(self::DEFAULT_MESSAGE, true, $this->code);
-
+      header($this->message, true, $this->code);
       if(Runtime::isManagementAccess() && Debug::enabled() && Debug::appendToHeaders())
         header('Component-Exception: '.$this->message);
-    }
-
-    /**
-     * @return string
-     */
-    public function getFriendlyMessage()
-    {
-      if(isset(self::$m_mapHttpErrorCodes[$this->code]))
-        return self::$m_mapHttpErrorCodes[$this->code];
-
-      return self::DEFAULT_MESSAGE;
     }
     //--------------------------------------------------------------------------
 
@@ -213,15 +192,15 @@ namespace Components;
 
     // IMPLEMENTATION
     private static $m_mapMimeTypeSerializers=array(
+      'application/xml'=>'toXml',
       'application/json'=>'toJson',
-      'text/html'=>'toHtml',
-      'text/plain'=>'toString'
+      'text/html'=>'toHtml'
     );
 
     private static $m_mapHttpErrorCodes=array(
-      self::INTERNAL=>'Internal Server Error',
-      self::FORBIDDEN=>'Forbidden',
-      self::NOT_FOUND=>'Not Found'
+      self::INTERNAL_SERVER_ERROR=>self::MESSAGE_INTERNAL_SERVER_ERROR,
+      self::FORBIDDEN=>self::MESSAGE_FORBIDDEN,
+      self::NOT_FOUND=>self::MESSAGE_NOT_FOUND
     );
     //--------------------------------------------------------------------------
   }

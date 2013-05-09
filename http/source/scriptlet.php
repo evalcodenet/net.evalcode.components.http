@@ -16,18 +16,18 @@ namespace Components;
   {
     // PROPERTIES
     /**
-     * @var \Components\Http_Scriptlet_Request
+     * @var Components\Http_Scriptlet_Request
      */
     public $request;
     /**
-     * @var \Components\Http_Scriptlet_Response
+     * @var Components\Http_Scriptlet_Response
      */
     public $response;
     //--------------------------------------------------------------------------
 
 
     // STATIC ACCESSORS
-    public static function serve($pattern_, $scriptlet_=null)
+    public static function serve($pattern_=null, $scriptlet_=null)
     {
       if(null===$scriptlet_)
         $scriptlet_=get_called_class();

@@ -35,7 +35,7 @@ namespace Components;
 
     // ACCESSORS/MUTATORS
     /**
-     * @return \Components\Io_MimeType
+     * @return Components\Io_MimeType
      */
     public function getMimeType()
     {
@@ -49,7 +49,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Uri
+     * @return Components\Uri
      */
     public function getUri()
     {
@@ -57,7 +57,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\HashMap
+     * @return Components\HashMap
      */
     public function getParams()
     {
@@ -69,10 +69,26 @@ namespace Components;
      */
     public function getMethod()
     {
-      if(isset($_SERVER['REQUEST_METHOD']))
-        return strtoupper($_SERVER['REQUEST_METHOD']);
+      if(null===$this->m_method)
+      {
+        if(isset($_SERVER['REQUEST_METHOD']))
+          $this->m_method=strtoupper($_SERVER['REQUEST_METHOD']);
 
-      return self::METHOD_GET;
+        $this->m_method=self::METHOD_GET;
+      }
+
+      return $this->m_method;
+    }
+
+    /**
+     * @param string $method_
+     */
+    public function setMethod($method_)
+    {
+      if(false===in_array($method_, self::$m_methods))
+        throw new Exception_IllegalArgument('components/http/scriptlet/request', 'Given argument must be a valid HTTP method.');
+
+      $this->m_method=$method_;
     }
     //--------------------------------------------------------------------------
 
@@ -93,11 +109,12 @@ namespace Components;
 
     public function __toString()
     {
-      return sprintf('%s@%s{uri: %s, mimeType: %s}',
+      return sprintf('%s@%s{uri: %s, mimeType: %s, method: %s}',
         __CLASS__,
         $this->hashCode(),
         $this->m_uri,
-        $this->m_mimeType
+        $this->m_mimeType,
+        $this->m_method
       );
     }
     //--------------------------------------------------------------------------
@@ -105,17 +122,33 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var \Components\Io_MimeType
+     * @var array|string
+     */
+    private static $m_methods=array(
+      self::METHOD_DELETE,
+      self::METHOD_GET,
+      self::METHOD_HEAD,
+      self::METHOD_OPTIONS,
+      self::METHOD_POST,
+      self::METHOD_PUT
+    );
+
+    /**
+     * @var Components\Io_MimeType
      */
     private $m_mimeType;
     /**
-     * @var \Components\Uri
+     * @var Components\Uri
      */
     private $m_uri;
     /**
-     * @var \Components\HashMap
+     * @var Components\HashMap
      */
     private $m_params;
+    /**
+     * @var string
+     */
+    private $m_method;
     //--------------------------------------------------------------------------
   }
 ?>

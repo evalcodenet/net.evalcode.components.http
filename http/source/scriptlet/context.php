@@ -25,7 +25,7 @@ namespace Components;
 
     // STATIC ACCESSORS
     /**
-     * @return \Components\Http_Scriptlet_Context
+     * @return Components\Http_Scriptlet_Context
      */
     public static function current()
     {
@@ -33,9 +33,9 @@ namespace Components;
     }
 
     /**
-     * @param \Components\Http_Scriptlet_Context $context_
+     * @param Components\Http_Scriptlet_Context $context_
      *
-     * @return \Components\Http_Scriptlet_Context
+     * @return Components\Http_Scriptlet_Context
      */
     public static function push(Http_Scriptlet_Context $context_)
     {
@@ -49,7 +49,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Http_Scriptlet_Context
+     * @return Components\Http_Scriptlet_Context
      */
     public static function pop()
     {
@@ -68,9 +68,9 @@ namespace Components;
 
     // ACCESSORS/MUTATORS
     /**
-     * @param \Components\Uri $uri_
+     * @param Components\Uri $uri_
      */
-    public function dispatch(Uri $uri_)
+    public function dispatch(Uri $uri_, $method_=null)
     {
       ob_start();
 
@@ -78,7 +78,7 @@ namespace Components;
 
       try
       {
-        $this->dispatchImpl($uri_);
+        $this->dispatchImpl($uri_, $method_);
       }
       catch(\Exception $e)
       {
@@ -93,14 +93,14 @@ namespace Components;
 
       if(null===$exception)
       {
-        ob_flush();
+        ob_end_flush();
       }
       else
       {
         $exception->log();
         $exception->sendHeader();
 
-        ob_flush();
+        ob_end_flush();
 
         echo $exception->to($this->m_response->getMimeType());
       }
@@ -110,7 +110,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Http_Scriptlet_Request
+     * @return Components\Http_Scriptlet_Request
      */
     public function getRequest()
     {
@@ -118,7 +118,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Http_Scriptlet_Response
+     * @return Components\Http_Scriptlet_Response
      */
     public function getResponse()
     {
@@ -126,7 +126,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Uri
+     * @return Components\Uri
      */
     public function getContextUri()
     {
@@ -170,7 +170,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|\Components\Http_Scriptlet_Context
+     * @var array|Components\Http_Scriptlet_Context
      */
     private static $m_stack=array();
     /**
@@ -178,7 +178,7 @@ namespace Components;
      */
     private static $m_count=0;
     /**
-     * @var \Components\Http_Scriptlet_Context
+     * @var Components\Http_Scriptlet_Context
      */
     private static $m_current;
 
@@ -187,23 +187,26 @@ namespace Components;
      */
     private $m_contextRoot;
     /**
-     * @var \Components\Uri
+     * @var Components\Uri
      */
     private $m_contextUri;
     /**
-     * @var \Components\Http_Scriptlet_Request
+     * @var Components\Http_Scriptlet_Request
      */
     private $m_request;
     /**
-     * @var \Components\Http_Scriptlet_Response
+     * @var Components\Http_Scriptlet_Response
      */
     private $m_response;
     //-----
 
 
-    private function dispatchImpl(Uri $uri_)
+    private function dispatchImpl(Uri $uri_, $method_=null)
     {
       $this->m_request=new Http_Scriptlet_Request(clone $uri_);
+
+      if(null!==$method_)
+        $this->m_request->setMethod($method_);
 
       $mimeType=$this->m_request->getMimeType();
       $this->m_response=new Http_Scriptlet_Response($mimeType);

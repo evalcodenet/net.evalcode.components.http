@@ -24,7 +24,7 @@ namespace Components;
 
     // STATIC ACCESSORS
     /**
-     * @return \Components\Io_MimeType
+     * @return Components\Io_MimeType
      */
     public function getMimeType()
     {
@@ -32,7 +32,7 @@ namespace Components;
     }
 
     /**
-     * @param \Components\Io_MimeType $mimeType_
+     * @param Components\Io_MimeType $mimeType_
      */
     public function setMimeType(Io_MimeType $mimeType_)
     {
@@ -58,7 +58,7 @@ namespace Components;
     }
 
     /**
-     * @return \Components\Http_Exception
+     * @return Components\Http_Exception
      */
     public function getException()
     {
@@ -66,7 +66,7 @@ namespace Components;
     }
 
     /**
-     * @param \Components\Http_Exception $exception_
+     * @param Components\Http_Exception $exception_
      */
     public function setException(Http_Exception $exception_)
     {
@@ -103,11 +103,11 @@ namespace Components;
     // IMPLEMENTATION
     private $m_parameters=array();
     /**
-     * @var \Components\Http_Exception
+     * @var Components\Http_Exception
      */
     private $m_exception;
     /**
-     * @var \Components\Io_MimeType
+     * @var Components\Io_MimeType
      */
     private $m_mimeType;
     //--------------------------------------------------------------------------

@@ -55,7 +55,7 @@ namespace Components;
 
     // ACCESSORS
     /**
-     * @param \Components\Io_MimeType $mimeType_
+     * @param Components\Io_MimeType $mimeType_
      *
      * @return string
      */

@@ -25,7 +25,7 @@ namespace Components;
 
     // STATIC ACCESSORS
     /**
-     * @return Components\Http_Scriptlet_Context
+     * @return \Components\Http_Scriptlet_Context
      */
     public static function current()
     {
@@ -33,9 +33,9 @@ namespace Components;
     }
 
     /**
-     * @param Components\Http_Scriptlet_Context $context_
+     * @param \Components\Http_Scriptlet_Context $context_
      *
-     * @return Components\Http_Scriptlet_Context
+     * @return \Components\Http_Scriptlet_Context
      */
     public static function push(Http_Scriptlet_Context $context_)
     {
@@ -49,7 +49,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\Http_Scriptlet_Context
+     * @return \Components\Http_Scriptlet_Context
      */
     public static function pop()
     {
@@ -68,7 +68,7 @@ namespace Components;
 
     // ACCESSORS/MUTATORS
     /**
-     * @param Components\Uri $uri_
+     * @param \Components\Uri $uri_
      */
     public function dispatch(Uri $uri_, $method_=null)
     {
@@ -110,7 +110,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\Http_Scriptlet_Request
+     * @return \Components\Http_Scriptlet_Request
      */
     public function getRequest()
     {
@@ -118,7 +118,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\Http_Scriptlet_Response
+     * @return \Components\Http_Scriptlet_Response
      */
     public function getResponse()
     {
@@ -126,7 +126,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\Uri
+     * @return \Components\Uri
      */
     public function getContextUri()
     {

@@ -35,7 +35,7 @@ namespace Components;
 
     // ACCESSORS/MUTATORS
     /**
-     * @return Components\Io_MimeType
+     * @return \Components\Io_MimeType
      */
     public function getMimeType()
     {
@@ -49,7 +49,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\Uri
+     * @return \Components\Uri
      */
     public function getUri()
     {
@@ -57,7 +57,7 @@ namespace Components;
     }
 
     /**
-     * @return Components\HashMap
+     * @return \Components\HashMap
      */
     public function getParams()
     {

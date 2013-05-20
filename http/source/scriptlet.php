@@ -89,7 +89,7 @@ namespace Components;
           return $scriptlet->$method();
       }
 
-      throw new Http_Exception('components/http/scriptlet', Http_Exception::NOT_FOUND);
+      throw new Http_Exception('http/scriptlet', Http_Exception::NOT_FOUND);
     }
     //--------------------------------------------------------------------------
 

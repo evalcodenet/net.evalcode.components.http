@@ -18,7 +18,6 @@ namespace Components;
     public function __construct($contextRoot_='/')
     {
       $this->m_contextRoot=$contextRoot_;
-      $this->m_contextUri=Uri::valueOf($contextRoot_);
     }
     //--------------------------------------------------------------------------
 
@@ -203,6 +202,7 @@ namespace Components;
 
     private function dispatchImpl(Uri $uri_, $method_=null)
     {
+      $this->m_contextUri=Uri::valueOf($this->m_contextRoot);
       $this->m_request=new Http_Scriptlet_Request(clone $uri_);
 
       if(null!==$method_)
@@ -222,12 +222,12 @@ namespace Components;
         while(count($contextRootSegments))
         {
           if(array_shift($contextRootSegments)!==$uri_->shiftPathParam())
-            throw new Http_Exception('components/http/scriptlet/context', Http_Exception::NOT_FOUND);
+            throw new Http_Exception('http/scriptlet/context', Http_Exception::NOT_FOUND);
         }
       }
 
       if(!$component=$uri_->shiftPathParam())
-        throw new Http_Exception('components/http/scriptlet/context', Http_Exception::NOT_FOUND);
+        throw new Http_Exception('http/scriptlet/context', Http_Exception::NOT_FOUND);
 
       $this->m_contextUri->pushPathParam($component);
 

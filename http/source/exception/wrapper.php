@@ -49,7 +49,14 @@ namespace Components;
     public function log()
     {
       if($this->m_logEnabled)
+      {
         Log::error($this->m_namespace, $this->message);
+
+        if(($cause=$this->m_exception->getPrevious()) instanceof Runtime_Exception)
+          $cause->log();
+        else if($cause instanceof \Exception)
+          Log::error($this->m_namespace, $cause->getMessage());
+      }
     }
 
     /**

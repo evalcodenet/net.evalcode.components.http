@@ -145,7 +145,7 @@ namespace Components;
     public function sendHeader()
     {
       header($this->message, true, $this->code);
-      if(Runtime::isManagementAccess() && Debug::enabled() && Debug::appendToHeaders())
+      if(Runtime::isManagementAccess() && Debug::active() && Debug::appendToHeaders())
         header('Component-Exception: '.$this->message);
     }
     //--------------------------------------------------------------------------

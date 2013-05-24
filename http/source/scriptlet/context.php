@@ -87,6 +87,15 @@ namespace Components;
         $exception=$e;
       }
 
+      if(Debug::active())
+      {
+        if(Debug::appendToHeaders())
+          header('Components-Debug: '.Debug::fetchJson());
+        if(false===Environment::isLive() && Debug::appendToBody()
+          && Io_MimeType::TEXT_HTML()->equals($this->m_response->getMimeType()))
+          Debug::flushHtml();
+      }
+
       if(null===$exception)
         $exception=$this->m_response->getException();
 

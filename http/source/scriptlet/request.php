@@ -28,7 +28,10 @@ namespace Components;
     public function __construct(Uri $uri_)
     {
       $this->m_uri=$uri_;
-      $this->m_params=new HashMap($_REQUEST);
+
+      // FIXME (CSH) Pass-through on dispatch / allow explicit definition e.g. for CLI invocation.
+      if(isset($_REQUEST))
+        $this->m_params=new HashMap($_REQUEST);
     }
     //--------------------------------------------------------------------------
 

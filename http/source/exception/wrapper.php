@@ -22,7 +22,7 @@ namespace Components;
       else
         $namespace=Http_Exception::DEFAULT_NAMESPACE;
 
-      parent::__construct($namespace, Http_Exception::INTERNAL_SERVER_ERROR, $e_->getMessage(), array(), $e_, $logEnabled_);
+      parent::__construct($namespace, $e_->getMessage(), Http_Exception::INTERNAL_SERVER_ERROR, array(), $e_, $logEnabled_);
 
       $this->m_exception=$e_;
     }

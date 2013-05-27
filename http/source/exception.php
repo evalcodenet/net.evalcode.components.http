@@ -39,7 +39,7 @@ namespace Components;
 
     // CONSTRUCTION
     public function __construct($namespace_=self::DEFAULT_NAMESPACE,
-      $code_=self::DEFAULT_ERROR_CODE, $message_=null, array $params_=array(),
+      $message_=null, $code_=self::DEFAULT_ERROR_CODE, array $params_=array(),
       $cause_=null, $logEnabled_=true)
     {
       if(null===$message_ && isset(self::$m_mapHttpErrorCodes[$code_]))
@@ -49,6 +49,42 @@ namespace Components;
 
       $this->code=$code_;
       $this->params=$params_;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // STATIC ACCESSORS
+    /**
+     * @param string $namespace_
+     * @param string $message_
+     *
+     * @return \Components\Http_Exception
+     */
+    public static function notFound($namespace_, $message_=null)
+    {
+      return new static($namespace_, $message_, self::NOT_FOUND);
+    }
+
+    /**
+     * @param string $namespace_
+     * @param string $message_
+     *
+     * @return \Components\Http_Exception
+     */
+    public static function forbidden($namespace_, $message_=null)
+    {
+      return new static($namespace_, $message_, self::FORBIDDEN);
+    }
+
+    /**
+     * @param string $namespace_
+     * @param string $message_
+     *
+     * @return \Components\Http_Exception
+     */
+    public static function internalError($namespace_, $message_=null)
+    {
+      return new static($namespace_, $message_, self::INTERNAL_SERVER_ERROR);
     }
     //--------------------------------------------------------------------------
 

@@ -16,11 +16,11 @@ namespace Components;
   {
     // PROPERTIES
     /**
-     * @var Components\Http_Scriptlet_Request
+     * @var \Components\Http_Scriptlet_Request
      */
     public $request;
     /**
-     * @var Components\Http_Scriptlet_Response
+     * @var \Components\Http_Scriptlet_Response
      */
     public $response;
     //--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ namespace Components;
           return $scriptlet->$method();
       }
 
-      throw new Http_Exception('http/scriptlet', Http_Exception::NOT_FOUND);
+      throw Http_Exception::notFound('http/scriptlet');
     }
     //--------------------------------------------------------------------------
 

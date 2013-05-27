@@ -87,11 +87,12 @@ namespace Components;
         $exception=$e;
       }
 
-      if(Debug::active())
+      if(Debug::active() && false===Debug::isEmpty())
       {
         if(Debug::appendToHeaders())
           header('Components-Debug: '.Debug::fetchJson());
-        if(false===Environment::isLive() && Debug::appendToBody()
+        if(false===Environment::isLive()
+          && Debug::appendToBody()
           && Io_MimeType::TEXT_HTML()->equals($this->m_response->getMimeType()))
           Debug::flushHtml();
       }
@@ -231,12 +232,12 @@ namespace Components;
         while(count($contextRootSegments))
         {
           if(array_shift($contextRootSegments)!==$uri_->shiftPathParam())
-            throw new Http_Exception('http/scriptlet/context', Http_Exception::NOT_FOUND);
+            throw Http_Exception::notFound('http/scriptlet/context');
         }
       }
 
       if(!$component=$uri_->shiftPathParam())
-        throw new Http_Exception('http/scriptlet/context', Http_Exception::NOT_FOUND);
+        throw Http_Exception::notFound('http/scriptlet/context');
 
       $this->m_contextUri->pushPathParam($component);
 

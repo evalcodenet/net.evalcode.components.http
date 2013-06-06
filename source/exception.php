@@ -91,14 +91,14 @@ namespace Components;
 
     // ACCESSORS
     /**
-     * @param \Components\Io_MimeType $mimeType_
+     * @param \Components\Io_Mimetype $mimeType_
      *
      * @return string
      */
-    public function to(Io_MimeType $mimeType_)
+    public function to(Io_Mimetype $mimeType_)
     {
-      if(isset(self::$m_mapMimeTypeSerializers[$mimeType_->name()]))
-        return $this->{self::$m_mapMimeTypeSerializers[$mimeType_->name()]}();
+      if(isset(self::$m_mapMimetypeSerializers[$mimeType_->name()]))
+        return $this->{self::$m_mapMimetypeSerializers[$mimeType_->name()]}();
 
       return $this->__toString();
     }
@@ -227,7 +227,7 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private static $m_mapMimeTypeSerializers=array(
+    private static $m_mapMimetypeSerializers=array(
       'application/xml'=>'toXml',
       'application/json'=>'toJson',
       'text/html'=>'toHtml'

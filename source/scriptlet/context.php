@@ -93,7 +93,7 @@ namespace Components;
           header('Components-Debug: '.Debug::fetchJson());
         if(false===Environment::isLive()
           && Debug::appendToBody()
-          && Io_MimeType::TEXT_HTML()->equals($this->m_response->getMimeType()))
+          && Io_Mimetype::TEXT_HTML()->equals($this->m_response->getMimetype()))
           Debug::flushHtml();
       }
 
@@ -111,7 +111,7 @@ namespace Components;
 
         ob_end_flush();
 
-        echo $exception->to($this->m_response->getMimeType());
+        echo $exception->to($this->m_response->getMimetype());
       }
 
       if(session_id())
@@ -218,7 +218,7 @@ namespace Components;
       if(null!==$method_)
         $this->m_request->setMethod($method_);
 
-      $mimeType=$this->m_request->getMimeType();
+      $mimeType=$this->m_request->getMimetype();
       $this->m_response=new Http_Scriptlet_Response($mimeType);
 
       header('Content-Type: '.$mimeType->name().';charset='.$mimeType->charset()->name());

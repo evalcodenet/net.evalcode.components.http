@@ -38,14 +38,14 @@ namespace Components;
 
     // ACCESSORS/MUTATORS
     /**
-     * @return \Components\Io_MimeType
+     * @return \Components\Io_Mimetype
      */
-    public function getMimeType()
+    public function getMimetype()
     {
       if(null===$this->m_mimeType)
       {
-        if(!$this->m_mimeType=Io_MimeType::forFileName($this->m_uri->getPath()))
-          $this->m_mimeType=Io_MimeType::TEXT_HTML(Io_Charset::UTF_8());
+        if(!$this->m_mimeType=Io_Mimetype::forFileName($this->m_uri->getPath()))
+          $this->m_mimeType=Io_Mimetype::TEXT_HTML(Io_Charset::UTF_8());
       }
 
       return $this->m_mimeType;
@@ -137,7 +137,7 @@ namespace Components;
     );
 
     /**
-     * @var Components\Io_MimeType
+     * @var Components\Io_Mimetype
      */
     private $m_mimeType;
     /**

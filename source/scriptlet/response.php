@@ -15,7 +15,7 @@ namespace Components;
   class Http_Scriptlet_Response implements Object
   {
     // CONSTRUCTION
-    public function __construct(Io_MimeType $mimeType_)
+    public function __construct(Io_Mimetype $mimeType_)
     {
       $this->m_mimeType=$mimeType_;
     }
@@ -24,17 +24,17 @@ namespace Components;
 
     // STATIC ACCESSORS
     /**
-     * @return \Components\Io_MimeType
+     * @return \Components\Io_Mimetype
      */
-    public function getMimeType()
+    public function getMimetype()
     {
       return $this->m_mimeType;
     }
 
     /**
-     * @param \Components\Io_MimeType $mimeType_
+     * @param \Components\Io_Mimetype $mimeType_
      */
-    public function setMimeType(Io_MimeType $mimeType_)
+    public function setMimetype(Io_Mimetype $mimeType_)
     {
       $this->m_mimeType=$mimeType_;
     }
@@ -107,7 +107,7 @@ namespace Components;
      */
     private $m_exception;
     /**
-     * @var Components\Io_MimeType
+     * @var Components\Io_Mimetype
      */
     private $m_mimeType;
     //--------------------------------------------------------------------------

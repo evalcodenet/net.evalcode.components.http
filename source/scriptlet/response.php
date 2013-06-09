@@ -72,6 +72,11 @@ namespace Components;
     {
       $this->m_exception=$exception_;
     }
+
+    public function unsetException()
+    {
+      $this->m_exception=null;
+    }
     //--------------------------------------------------------------------------
 
 

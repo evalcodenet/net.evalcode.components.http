@@ -23,6 +23,7 @@ namespace Components;
       $instance=new static();
 
       $instance->addOption('u', true, null, 'dispatch uri', 'uri');
+      $instance->addOption('e', true, 'live', 'dispatch environment [dev|alpha|beta..|live]', 'environment');
 
       $instance->addEmptyOption();
       $instance->addOption('h', false, null, 'print command line instructions', 'help');
@@ -47,12 +48,12 @@ namespace Components;
 
       $this->open();
 
-      if($this->hasArgument('help') || $this->hasArgument('version'))
+      if($this->hasArgument('help') || $this->hasArgument('version') || false===$this->hasArgument('uri'))
       {
-        if($this->hasArgument('help'))
+        $this->appendInfo();
+
+        if(false===$this->hasArgument('version'))
           $this->appendOptions();
-        else
-          $this->appendInfo();
 
         $this->flush();
         $this->close();
@@ -63,6 +64,8 @@ namespace Components;
       if($this->hasArgument('uri'))
       {
         Runtime::addRuntimeErrorHandler(new Http_Error_Handler());
+
+        Environment::push(Environment::valueOf(strtolower($this->getArgument('environment'))));
 
         $context=Http_Scriptlet_Context::push(new Http_Scriptlet_Context(Environment::uriComponents()));
         $context->dispatch(Uri::valueOf($this->getArgument('uri')));

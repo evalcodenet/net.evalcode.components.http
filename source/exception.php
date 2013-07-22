@@ -113,7 +113,7 @@ namespace Components;
         'code'=>$this->code,
         'namespace'=>$this->getNamespace(),
         'message'=>$this->getMessage(),
-        'trace'=>$this->getStackTrace(true),
+        'stack'=>$this->getStackTrace(true),
         'params'=>$this->params
       ));
     }
@@ -215,12 +215,9 @@ namespace Components;
      */
     public function __toString()
     {
-      return sprintf('%s@%s{namespace: %s, message: %s, code: %s}',
-        __CLASS__,
-        object_hash($this),
-        $this->getNamespace(),
-        $this->getMessage(),
-        $this->code
+      return sprintf("%s\n\n%s\n",
+        $this->message,
+        $this->getTraceAsString()
       );
     }
     //--------------------------------------------------------------------------

@@ -65,12 +65,9 @@ namespace Components;
      */
     public function __toString()
     {
-      return sprintf('%1$s@%2$s{namespace: %3$s, message: %4$s, code: %5$s}',
-        __CLASS__,
-        $this->hashCode(),
-        $this->getNamespace(),
-        $this->getMessage(),
-        $this->code
+      return sprintf("%s\n\n%s\n",
+        $this->message,
+        $this->getTraceAsString()
       );
     }
     //--------------------------------------------------------------------------

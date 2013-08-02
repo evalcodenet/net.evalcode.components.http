@@ -87,32 +87,32 @@ namespace Components;
         $exception=$e;
       }
 
-      if(Debug::active() && false===Debug::isEmpty())
-      {
-        if(Debug::appendToHeaders())
-          header('Components-Debug: '.Debug::fetchJson());
-        if(false===Environment::isLive()
-          && Debug::appendToBody()
-          && Io_Mimetype::TEXT_HTML()->equals($this->m_response->getMimetype()))
-          Debug::flushHtml();
-      }
-
       if(null===$exception)
         $exception=$this->m_response->getException();
 
-      if(null===$exception)
+      $exception->log();
+      if($exception instanceof Http_Exception)
+        $exception->sendHeader();
+
+      if(Runtime::isManagementAccess())
       {
-        ob_end_flush();
+        if(null!==$exception)
+          Debug::dumpException($exception);
+
+        if(Debug::active())
+        {
+          Debug::flushHeaders();
+
+          if(false===Environment::isLive() && Debug::appendToBody() && Io_Mimetype::TEXT_HTML()->equals($this->m_response->getMimetype()))
+            echo Debug::fetchHtml();
+        }
       }
       else
       {
-        $exception->log();
-        $exception->sendHeader();
-
-        ob_end_flush();
-
-        echo $exception->to($this->m_response->getMimetype());
+        // TODO User-friendly error page ...
       }
+
+      ob_end_flush();
 
       if(session_id())
         session_write_close();

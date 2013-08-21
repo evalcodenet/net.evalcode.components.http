@@ -44,6 +44,15 @@ namespace Components;
 
     /**
      * (non-PHPdoc)
+     * @see \Components\Http_Exception::sendHeader()
+     */
+    public function sendHeader()
+    {
+      Runtime_Exception::sendHeader();
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see Components\Runtime_Exception::log()
      */
     public function log()

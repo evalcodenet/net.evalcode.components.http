@@ -76,8 +76,8 @@ namespace Components;
       {
         if(isset($_SERVER['REQUEST_METHOD']))
           $this->m_method=strtoupper($_SERVER['REQUEST_METHOD']);
-
-        $this->m_method=self::METHOD_GET;
+        else
+          $this->m_method=self::METHOD_GET;
       }
 
       return $this->m_method;

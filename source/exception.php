@@ -86,6 +86,30 @@ namespace Components;
     {
       return new static($namespace_, $message_, self::INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * Sends header: HTTP/1.1 404 Not Found
+     */
+    public static function sendHeaderNotFound()
+    {
+      header(self::MESSAGE_NOT_FOUND, true, self::NOT_FOUND);
+    }
+
+    /**
+     * Sends header: HTTP/1.1 403 Forbidden
+     */
+    public static function sendHeaderForbidden()
+    {
+      header(self::MESSAGE_FORBIDDEN, true, self::FORBIDDEN);
+    }
+
+    /**
+     * Sends header: HTTP/1.1 500 Internal Server Error
+     */
+    public static function sendHeaderInternalError()
+    {
+      header(self::MESSAGE_INTERNAL_SERVER_ERROR, true, self::INTERNAL_SERVER_ERROR);
+    }
     //--------------------------------------------------------------------------
 
 
@@ -180,6 +204,8 @@ namespace Components;
 
     public function sendHeader()
     {
+      parent::sendHeader();
+
       header($this->message, true, $this->code);
     }
     //--------------------------------------------------------------------------

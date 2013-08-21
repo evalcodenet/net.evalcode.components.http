@@ -73,46 +73,45 @@ namespace Components;
     {
       ob_start();
 
+      $content=null;
       $exception=null;
 
       try
       {
         $this->dispatchImpl($uri_, $method_);
+
+        $content=ob_get_clean();
+        $exception=$this->m_response->getException();
       }
       catch(\Exception $e)
       {
-        if(!$e instanceof Http_Exception)
-          $e=new Http_Exception_Wrapper($e);
-
         $exception=$e;
       }
 
+      Debug::appendToHeaders();
+
       if(null===$exception)
-        $exception=$this->m_response->getException();
-
-      $exception->log();
-      if($exception instanceof Http_Exception)
-        $exception->sendHeader();
-
-      if(Runtime::isManagementAccess())
       {
-        if(null!==$exception)
-          Debug::dumpException($exception);
-
-        if(Debug::active())
-        {
-          Debug::flushHeaders();
-
-          if(false===Environment::isLive() && Debug::appendToBody() && Io_Mimetype::TEXT_HTML()->equals($this->m_response->getMimetype()))
-            echo Debug::fetchHtml();
-        }
+        echo $content;
       }
       else
       {
-        // TODO User-friendly error page ...
+        exception_log($exception);
+        exception_header($exception);
+
+        if(Environment::isLive())
+        {
+          // TODO Custom 4xx, 5xx etc. error pages.
+          exit;
+        }
+
+        echo $content;
+
+        Debug::dumpException($exception);
       }
 
-      ob_end_flush();
+      if($this->m_response->getMimetype()->isTextHtml())
+        Debug::appendToBody();
 
       if(session_id())
         session_write_close();
@@ -179,7 +178,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|Components\Http_Scriptlet_Context
+     * @var array|\Components\Http_Scriptlet_Context
      */
     private static $m_stack=array();
     /**
@@ -187,7 +186,7 @@ namespace Components;
      */
     private static $m_count=0;
     /**
-     * @var Components\Http_Scriptlet_Context
+     * @var \Components\Http_Scriptlet_Context
      */
     private static $m_current;
 
@@ -196,15 +195,15 @@ namespace Components;
      */
     private $m_contextRoot;
     /**
-     * @var Components\Uri
+     * @var \Components\Uri
      */
     private $m_contextUri;
     /**
-     * @var Components\Http_Scriptlet_Request
+     * @var \Components\Http_Scriptlet_Request
      */
     private $m_request;
     /**
-     * @var Components\Http_Scriptlet_Response
+     * @var \Components\Http_Scriptlet_Response
      */
     private $m_response;
     //-----

@@ -30,9 +30,7 @@ namespace Components;
 
 
     // OVERRIDES
-    /**
-     * (non-PHPdoc)
-     * @see Components\Http_Exception::getStackTrace()
+    /**     * @see Components\Http_Exception::getStackTrace() Components\Http_Exception::getStackTrace()
      */
     public function getStackTrace($asString_=false)
     {
@@ -42,18 +40,14 @@ namespace Components;
       return $this->m_exception->getTrace();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Http_Exception::sendHeader()
+    /**     * @see \Components\Http_Exception::sendHeader() \Components\Http_Exception::sendHeader()
      */
     public function sendHeader()
     {
       Runtime_Exception::sendHeader();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see Components\Runtime_Exception::log()
+    /**     * @see Components\Runtime_Exception::log() Components\Runtime_Exception::log()
      */
     public function log()
     {
@@ -68,9 +62,7 @@ namespace Components;
       }
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see Components\Object::__toString()
+    /**     * @see Components\Object::__toString() Components\Object::__toString()
      */
     public function __toString()
     {

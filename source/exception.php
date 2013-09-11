@@ -150,7 +150,7 @@ namespace Components;
       // TODO Embed stack trace.
       return sprintf('<?xml version="1.0" encoding="utf-8"?>%6$s<exception>
           <type>%1$s</type>
-          <code>%2$s</code>
+          <pre>%2$s</pre>
           <namespace>%3$s</namespace>
           <message>%4$s</message>
           <source>%5$s</source>
@@ -214,7 +214,7 @@ namespace Components;
     // OVERRIDES
     /**
      * (non-PHPdoc)
-     * @see Components\Object::equals()
+     * @see Components\Object::equals() Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -226,16 +226,14 @@ namespace Components;
 
     /**
      * (non-PHPdoc)
-     * @see Components\Object::hashCode()
+     * @see Components\Object::hashCode() Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see Components\Object::__toString()
+    /**     * @see Components\Object::__toString() Components\Object::__toString()
      */
     public function __toString()
     {

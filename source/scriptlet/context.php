@@ -7,8 +7,9 @@ namespace Components;
   /**
    * Http_Scriptlet_Context
    *
-   * @package net.evalcode.components
-   * @subpackage http.scriptlet
+   * @api
+   * @package net.evalcode.components.http
+   * @subpackage scriptlet
    *
    * @author evalcode.net
    */
@@ -65,7 +66,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     /**
      * @param \Components\Uri $uri_
      */
@@ -151,7 +152,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
     public function hashCode()
     {
       return string_hash($this->m_contextRoot);
@@ -178,7 +179,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|\Components\Http_Scriptlet_Context
+     * @var \Components\Http_Scriptlet_Context[]
      */
     private static $m_stack=array();
     /**
@@ -189,7 +190,6 @@ namespace Components;
      * @var \Components\Http_Scriptlet_Context
      */
     private static $m_current;
-
     /**
      * @var string
      */

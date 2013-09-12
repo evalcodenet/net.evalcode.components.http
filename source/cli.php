@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Http_Cli
    *
-   * @package net.evalcode.components
-   * @subpackage http.cli
+   * @api
+   * @package net.evalcode.components.http
    *
    * @author evalcode.net
    */

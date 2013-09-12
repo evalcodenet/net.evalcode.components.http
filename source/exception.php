@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Http_Exception
    *
-   * @package net.evalcode.components
-   * @subpackage http
+   * @api
+   * @package net.evalcode.components.http
    *
    * @author evalcode.net
    */
@@ -213,8 +213,7 @@ namespace Components;
 
     // OVERRIDES
     /**
-     * (non-PHPdoc)
-     * @see Components\Object::equals() Components\Object::equals()
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -225,15 +224,15 @@ namespace Components;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Components\Object::hashCode() Components\Object::hashCode()
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**     * @see Components\Object::__toString() Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {

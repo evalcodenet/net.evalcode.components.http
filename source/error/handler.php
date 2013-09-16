@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Http_Error_Handler
    *
-   * @package net.evalcode.components
-   * @subpackage http.error
+   * @package net.evalcode.components.http
+   * @subpackage error
    *
    * @author evalcode.net
    */
@@ -16,8 +16,7 @@ namespace Components;
   {
     // OVERRIDES
     /**
-     * (non-PHPdoc)
-     * @see Components\Runtime_Error_Handler::onError()
+     * @see \Components\Runtime_Error_Handler::onError() \Components\Runtime_Error_Handler::onError()
      */
     public function onError(Runtime_ErrorException $e_)
     {
@@ -32,8 +31,7 @@ namespace Components;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Components\Object::equals()
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -44,8 +42,7 @@ namespace Components;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Components\Object::hashCode()
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
@@ -53,8 +50,7 @@ namespace Components;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Components\Object::__toString()
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {

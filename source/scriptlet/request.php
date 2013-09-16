@@ -7,8 +7,9 @@ namespace Components;
   /**
    * Http_Scriptlet_Request
    *
-   * @package net.evalcode.components
-   * @subpackage http.scriptlet
+   * @api
+   * @package net.evalcode.components.http
+   * @subpackage scriptlet
    *
    * @author evalcode.net
    */
@@ -36,7 +37,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     /**
      * @return \Components\Io_Mimetype
      */
@@ -96,12 +97,18 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+     */
     public function hashCode()
     {
       return object_hash($this);
     }
 
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
+     */
     public function equals($object_)
     {
       if($object_ instanceof self)
@@ -110,6 +117,9 @@ namespace Components;
       return false;
     }
 
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
+     */
     public function __toString()
     {
       return sprintf('%s@%s{uri: %s, mimeType: %s, method: %s}',
@@ -125,7 +135,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|string
+     * @var string[]
      */
     private static $m_methods=array(
       self::METHOD_DELETE,
@@ -137,15 +147,15 @@ namespace Components;
     );
 
     /**
-     * @var Components\Io_Mimetype
+     * @var \Components\Io_Mimetype
      */
     private $m_mimeType;
     /**
-     * @var Components\Uri
+     * @var \Components\Uri
      */
     private $m_uri;
     /**
-     * @var Components\HashMap
+     * @var \Components\HashMap
      */
     private $m_params;
     /**

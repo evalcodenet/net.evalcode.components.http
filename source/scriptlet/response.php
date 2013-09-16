@@ -7,8 +7,9 @@ namespace Components;
   /**
    * Http_Scriptlet_Response
    *
-   * @package net.evalcode.components
-   * @subpackage http.scriptlet
+   * @api
+   * @package net.evalcode.components.http
+   * @subpackage scriptlet
    *
    * @author evalcode.net
    */
@@ -80,12 +81,18 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+     */
     public function hashCode()
     {
       return object_hash($this);
     }
 
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
+     */
     public function equals($object_)
     {
       if($object_ instanceof self)
@@ -94,6 +101,9 @@ namespace Components;
       return false;
     }
 
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
+     */
     public function __toString()
     {
       return sprintf('%s@%s{mimeType: %s}',
@@ -108,11 +118,11 @@ namespace Components;
     // IMPLEMENTATION
     private $m_parameters=array();
     /**
-     * @var Components\Http_Exception
+     * @var \Components\Http_Exception
      */
     private $m_exception;
     /**
-     * @var Components\Io_Mimetype
+     * @var \Components\Io_Mimetype
      */
     private $m_mimeType;
     //--------------------------------------------------------------------------

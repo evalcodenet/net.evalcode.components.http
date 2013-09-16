@@ -74,28 +74,25 @@ namespace Components;
     {
       ob_start();
 
-      $content=null;
       $exception=null;
 
       try
       {
         $this->dispatchImpl($uri_, $method_);
-
-        $content=ob_get_clean();
-        $exception=$this->m_response->getException();
       }
       catch(\Exception $e)
       {
         $exception=$e;
       }
 
-      Debug::appendToHeaders();
+      $content=ob_get_clean();
 
       if(null===$exception)
-      {
-        echo $content;
-      }
-      else
+        $exception=$this->m_response->getException();
+
+      Debug::appendToHeaders();
+
+      if(null!==$exception)
       {
         exception_log($exception);
         exception_header($exception);
@@ -110,6 +107,8 @@ namespace Components;
 
         Debug::dumpException($exception);
       }
+
+      echo $content;
 
       if($this->m_response->getMimetype()->isTextHtml())
         Debug::appendToBody();

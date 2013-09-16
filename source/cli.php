@@ -23,7 +23,6 @@ namespace Components;
       $instance=new static();
 
       $instance->addOption('u', true, null, 'dispatch uri', 'uri');
-      $instance->addOption('e', true, 'live', 'dispatch environment [dev|alpha|beta..|live]', 'environment');
 
       $instance->addEmptyOption();
       $instance->addOption('h', false, null, 'print command line instructions', 'help');
@@ -64,8 +63,6 @@ namespace Components;
       if($this->hasArgument('uri'))
       {
         Runtime::addRuntimeErrorHandler(new Http_Error_Handler());
-
-        Environment::push(Environment::valueOf(strtolower($this->getArgument('environment'))));
 
         $context=Http_Scriptlet_Context::push(new Http_Scriptlet_Context(Environment::uriComponents()));
         $context->dispatch(Uri::valueOf($this->getArgument('uri')));

@@ -41,6 +41,10 @@ namespace Components;
 
 
     // ACCESSORS
+    /**
+     * @param \Components\Http_Scriptlet_Context $context_
+     * @param \Components\Uri $uri_
+     */
     public static function dispatch(Http_Scriptlet_Context $context_, Uri $uri_)
     {
       if(__CLASS__===get_called_class())

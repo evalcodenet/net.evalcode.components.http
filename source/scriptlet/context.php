@@ -73,20 +73,21 @@ namespace Components;
     {
       ob_start();
 
-      $content=null;
       $exception=null;
 
       try
       {
         $this->dispatchImpl($uri_, $method_);
-
-        $content=ob_get_clean();
-        $exception=$this->m_response->getException();
       }
       catch(\Exception $e)
       {
         $exception=$e;
       }
+
+      $content=ob_get_clean();
+
+      if(null===$exception)
+        $exception=$this->m_response->getException();
 
       Debug::appendToHeaders();
 

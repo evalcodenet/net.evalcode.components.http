@@ -52,13 +52,13 @@ namespace Components;
         $segments=$uri_->getPathParams(true);
         $count=count($segments);
 
-        $params=array();
+        $params=[];
         for($i=$count; 0<$i; $i--)
         {
           $path=implode('/', $segments);
           foreach(self::$m_routes as $pattern=>$scriptlet)
           {
-            $matches=array();
+            $matches=[];
             if(1===preg_match($pattern, $path, $matches))
             {
               $uri_->setPathParams($params);
@@ -130,7 +130,7 @@ namespace Components;
 
     // IMPLEMENTATION
     private static $m_default;
-    private static $m_routes=array();
+    private static $m_routes=[];
     //--------------------------------------------------------------------------
   }
 ?>

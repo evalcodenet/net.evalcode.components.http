@@ -33,13 +33,13 @@ namespace Components;
 
     // PROPERTIES
     public $code;
-    public $params=array();
+    public $params=[];
     //--------------------------------------------------------------------------
 
 
     // CONSTRUCTION
     public function __construct($namespace_=self::DEFAULT_NAMESPACE,
-      $message_=null, $code_=self::DEFAULT_ERROR_CODE, array $params_=array(),
+      $message_=null, $code_=self::DEFAULT_ERROR_CODE, array $params_=[],
       $cause_=null, $logEnabled_=true)
     {
       if(null===$message_ && isset(self::$m_mapHttpErrorCodes[$code_]))

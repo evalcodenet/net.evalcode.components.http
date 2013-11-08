@@ -116,7 +116,7 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private $m_parameters=array();
+    private $m_parameters=[];
     /**
      * @var \Components\Http_Exception
      */

@@ -180,7 +180,7 @@ namespace Components;
     /**
      * @var \Components\Http_Scriptlet_Context[]
      */
-    private static $m_stack=array();
+    private static $m_stack=[];
     /**
      * @var integer
      */

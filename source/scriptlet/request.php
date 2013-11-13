@@ -94,6 +94,17 @@ namespace Components;
 
       $this->m_method=$method_;
     }
+
+    public function getReferer()
+    {
+      if(null===$this->m_referer)
+      {
+        if(isset($_SERVER['HTTP_REFERER']))
+          $this->m_referer=$_SERVER['HTTP_REFERER'];
+      }
+
+      return $this->m_referer;
+    }
     //--------------------------------------------------------------------------
 
 
@@ -162,6 +173,10 @@ namespace Components;
      * @var string
      */
     private $m_method;
+    /**
+     * @var string
+     */
+    private $m_referer;
     //--------------------------------------------------------------------------
   }
 ?>

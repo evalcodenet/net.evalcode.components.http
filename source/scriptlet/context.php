@@ -74,47 +74,49 @@ namespace Components;
     {
       ob_start();
 
-      $exception=null;
-
       try
       {
         $this->dispatchImpl($uri_, $method_);
       }
+      catch(Http_Exception $e)
+      {
+        if(Environment::isCli())
+          throw $e;
+
+        $e->log();
+        $e->sendHeader();
+      }
       catch(\Exception $e)
       {
-        $exception=$e;
+        Runtime::addException($e);
       }
 
-      $content=ob_get_clean();
-
-      if(null===$exception)
-        $exception=$this->m_response->getException();
-
-      Debug::appendToHeaders();
-
-      if(null!==$exception)
+      // FIXME Why??
+      if(Environment::isCli())
       {
-        exception_log($exception);
-        exception_header($exception);
+        echo ob_get_clean();
+      }
+      else
+      {
+        ob_flush();
 
-        if(Environment::isLive())
+        /**
+         * Do not corrupt output for other mimetypes - assuming:
+         * - Exceptions are logged
+         * - Debug output & exceptions are sent via headers
+         *
+         * Visualization happens via client side / logging or
+         * custom implementations of http/scriptlet#dispatch.
+         */
+        if(false===Io_Mimetype::TEXT_HTML()->equals($this->getResponse()->getMimetype()))
         {
-          // TODO Custom 4xx, 5xx etc. error pages.
-          exit;
+          Debug::clear();
+          Runtime::clearExceptions();
         }
 
-        echo $content;
-
-        Debug::dumpException($exception);
+        if(session_id())
+          session_write_close();
       }
-
-      echo $content;
-
-      if($this->m_response->getMimetype()->isTextHtml())
-        Debug::appendToBody();
-
-      if(session_id())
-        session_write_close();
     }
 
     /**
@@ -217,9 +219,9 @@ namespace Components;
         $this->m_request->setMethod($method_);
 
       $mimeType=$this->m_request->getMimetype();
-      $this->m_response=new Http_Scriptlet_Response($mimeType);
 
-      header('Content-Type: '.$mimeType->name().';charset='.$mimeType->charset()->name());
+      header('Content-Type: '.$mimeType->name().';charset='.$mimeType->charset()->name(), true, 200);
+      $this->m_response=new Http_Scriptlet_Response($mimeType);
 
       if('/'!==$this->m_contextRoot)
       {

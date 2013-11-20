@@ -62,8 +62,6 @@ namespace Components;
 
       if($this->hasArgument('uri'))
       {
-        Runtime::addRuntimeErrorHandler(new Http_Error_Handler());
-
         $context=Http_Scriptlet_Context::push(new Http_Scriptlet_Context(Environment::uriComponents()));
         $context->dispatch(Uri::valueOf($this->getArgument('uri')));
       }

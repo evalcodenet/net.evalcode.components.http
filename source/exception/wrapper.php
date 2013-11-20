@@ -29,9 +29,9 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES
+    // OVERRIDES/IMPLEMENTS
     /**
-     * @see \Components\Http_Exception::getStackTrace() \Components\Http_Exception::getStackTrace()
+     * @see \Components\Http_Exception::getStackTrace() getStackTrace
      */
     public function getStackTrace($asString_=false)
     {
@@ -42,37 +42,47 @@ namespace Components;
     }
 
     /**
-     * @see \Components\Http_Exception::sendHeader() \Components\Http_Exception::sendHeader()
+     * @see \Components\Http_Exception::sendHeader() sendHeader
      */
     public function sendHeader()
     {
-      Runtime_Exception::sendHeader();
+      header($this->message, true, $this->code);
+      exception_header($this->m_exception);
     }
 
     /**
-     * @see \Components\Runtime_Exception::log() \Components\Runtime_Exception::log()
+     * @see \Components\Runtime_Exception::log() log
      */
     public function log()
     {
       if($this->m_logEnabled)
       {
-        Log::error($this->m_namespace, $this->message);
+        Log::error($this->m_namespace, '[%s] %s%s',
+          object_hash_md5($this->m_exception),
+          get_class($this->m_exception),
+          $this->m_exception
+        );
 
-        if(($cause=$this->m_exception->getPrevious()) instanceof Runtime_Exception)
-          $cause->log();
-        else if($cause instanceof \Exception)
-          Log::error($this->m_namespace, $cause->getMessage());
+        if($previous=$this->m_exception->getPrevious())
+          exception_log($previous);
       }
     }
 
     /**
-     * @see \Components\Object::__toString() \Components\Object::__toString()
+     * @see \Components\Object::__toString() __toString
      */
     public function __toString()
     {
-      return sprintf("%s\n\n%s\n",
-        $this->message,
-        $this->getTraceAsString()
+      if(!$file=$this->m_exception->getFile())
+        $file='internal';
+      if(!$line=$this->m_exception->getLine())
+        $line=0;
+
+      return sprintf("\n\n#0 %s\n#0 %s(%d)\n#0\n%s\n",
+        $this->m_exception->getMessage(),
+        $file,
+        $line,
+        $this->m_exception->getTraceAsString()
       );
     }
     //--------------------------------------------------------------------------

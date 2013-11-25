@@ -114,6 +114,14 @@ namespace Components;
 
 
     // ACCESSORS
+    public function sendHeader()
+    {
+      header($this->message, true, $this->code);
+
+      if($previous=$this->getPrevious())
+        exception_header($previous);
+    }
+
     /**
      * @param \Components\Io_Mimetype $mimeType_
      *
@@ -130,61 +138,23 @@ namespace Components;
     /**
      * @return string
      */
-    public function toJson()
-    {
-      return json_encode(array(
-        'type'=>get_class($this),
-        'code'=>$this->code,
-        'namespace'=>$this->getNamespace(),
-        'message'=>$this->getMessage(),
-        'stack'=>$this->getStackTrace(true),
-        'params'=>$this->params
-      ));
-    }
-
-    /**
-     * @return string
-     */
-    public function toXml()
-    {
-      // TODO Embed stack trace.
-      return sprintf('<?xml version="1.0" encoding="utf-8"?>%6$s<exception>
-          <type>%1$s</type>
-          <pre>%2$s</pre>
-          <namespace>%3$s</namespace>
-          <message>%4$s</message>
-          <source>%5$s</source>
-        </exception>',
-          get_class($this),
-          $this->code,
-          $this->getNamespace(),
-          $this->getMessage(),
-          implode(':', array($this->getFile(), $this->getLine())),
-          PHP_EOL
-      );
-    }
-
-    /**
-     * @return string
-     */
     public function toHtml()
     {
-      return sprintf('<?xml encoding="utf-8" version="1.0"?>%6$s<!DOCTYPE HTML>%6$s<html>
+      return sprintf('<?xml encoding="utf-8" version="1.0"?>%4$s
+        <!DOCTYPE HTML>%4$s
+        <html>
           <head>
             <meta charset="utf-8"/>
-            <title>[%2$s] %3$s</title>
+            <title>%1$s</title>
           </head>
           <body>
-            <h1>[%2$s] %3$s</h1>
-            <h2>%4$s</h2>
-            <pre>%5$s</pre>
+            <h1>%1$s</h1>
+            <h2>[%2$s] %3$s</h2>
           </body>
         </html>',
           self::$m_mapHttpErrorCodes[$this->code],
           $this->getNamespace(),
           $this->getMessage(),
-          implode(':', array($this->getFile(), $this->getLine())),
-          $this->getStackTrace(true),
           PHP_EOL
       );
     }
@@ -201,19 +171,29 @@ namespace Components;
 
       return $this->getTrace();
     }
-
-    public function sendHeader()
-    {
-      parent::sendHeader();
-
-      header($this->message, true, $this->code);
-    }
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES
+    // OVERRIDES/IMPLEMENTS
     /**
-     * @see \Components\Object::equals() \Components\Object::equals()
+     * @see \Components\Runtime_Exception::toArray() toArray
+     */
+    public function toArray($includeStackTrace_=false, $stackTraceAsArray_=false)
+    {
+      $asArray=[
+        'code'=>$this->code,
+        'namespace'=>$this->getNamespace(),
+        'message'=>$this->getMessage()
+      ];
+
+      if($includeStackTrace_)
+        $asArray['stack']=$stackTraceAsArray_?[]:'';
+
+      return $asArray;
+    }
+
+    /**
+     * @see \Components\Object::equals() equals
      */
     public function equals($object_)
     {
@@ -224,7 +204,7 @@ namespace Components;
     }
 
     /**
-     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+     * @see \Components\Object::hashCode() hashCode
      */
     public function hashCode()
     {
@@ -232,12 +212,19 @@ namespace Components;
     }
 
     /**
-     * @see \Components\Object::__toString() \Components\Object::__toString()
+     * @see \Components\Object::__toString() __toString
      */
     public function __toString()
     {
-      return sprintf("%s\n\n%s\n",
+      if(!$file=$this->getFile())
+        $file='internal';
+      if(!$line=$this->getLine())
+        $line=0;
+
+      return sprintf("\n\n#0 %s\n#0 %s(%d)\n#0\n%s\n",
         $this->message,
+        $file,
+        $line,
         $this->getTraceAsString()
       );
     }

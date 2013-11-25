@@ -118,8 +118,10 @@ namespace Components;
     {
       header($this->message, true, $this->code);
 
+      $verbose=Runtime::isManagementAccess() && Debug::active();
+
       if($previous=$this->getPrevious())
-        exception_header($previous);
+        exception_header($previous, $verbose, $verbose);
     }
 
     /**

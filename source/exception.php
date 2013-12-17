@@ -113,7 +113,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS
+    // ACCESSORS/MUTATORS
     public function sendHeader()
     {
       header($this->message, true, $this->code);
@@ -223,8 +223,9 @@ namespace Components;
       if(!$line=$this->getLine())
         $line=0;
 
-      return sprintf("\n\n#0 %s\n#0 %s(%d)\n#0\n%s\n",
+      return sprintf("\n\n#  %s\n#  %s\n# \n#  %s(%d)\n%s\n",
         $this->message,
+        Uri::currentHttpRequestUri(),
         $file,
         $line,
         $this->getTraceAsString()

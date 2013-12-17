@@ -223,12 +223,15 @@ namespace Components;
       if(!$line=$this->getLine())
         $line=0;
 
-      return sprintf("\n\n#  %s\n#  %s\n# \n#  %s(%d)\n%s\n",
-        $this->message,
-        Uri::currentHttpRequestUri(),
-        $file,
-        $line,
-        $this->getTraceAsString()
+      return sprintf(
+        "\n\n#  msg : %s\n#  uri : %s\n%s%s# \n#  %s(%d)\n%s\n",
+          $this->message,
+          Uri::currentHttpRequestUri(),
+          isset($_SERVER['HTTP_REFERER'])?"#  host: $_SERVER[REMOTE_ADDR]\n":'',
+          isset($_SERVER['HTTP_REFERER'])?"#  ref : $_SERVER[HTTP_REFERER]\n":'',
+          $file,
+          $line,
+          $this->getTraceAsString()
       );
     }
     //--------------------------------------------------------------------------

@@ -78,17 +78,18 @@ namespace Components;
       {
         $this->dispatchImpl($uri_, $method_);
       }
-      catch(Http_Exception $e)
+      catch(\Exception $e)
       {
         if(Environment::isCli())
           throw $e;
 
-        $e->log();
-        $e->sendHeader();
-      }
-      catch(\Exception $e)
-      {
         Runtime::addException($e);
+
+        if($e instanceof Http_Exception)
+        {
+          $e->log();
+          $e->sendHeader();
+        }
       }
 
       // FIXME Why??
@@ -232,12 +233,12 @@ namespace Components;
         while(count($contextRootSegments))
         {
           if(array_shift($contextRootSegments)!==$uri_->shiftPathParam())
-            throw Http_Exception::notFound('http/scriptlet/context');
+            throw new Http_Exception('http/scriptlet/context', null, Http_Exception::NOT_FOUND);
         }
       }
 
       if(!$component=$uri_->shiftPathParam())
-        throw Http_Exception::notFound('http/scriptlet/context');
+        throw new Http_Exception('http/scriptlet/context', null, Http_Exception::NOT_FOUND);
 
       $this->m_contextUri->pushPathParam($component);
 

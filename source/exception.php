@@ -12,7 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Http_Exception extends Runtime_Exception
+  class Http_Exception extends Runtime_Exception_Abstract
   {
     // HTTP ERROR CODES
     const FORBIDDEN=403;
@@ -26,21 +26,19 @@ namespace Components;
     const MESSAGE_NOT_FOUND='HTTP/1.1 404 Not Found';
     const MESSAGE_INTERNAL_SERVER_ERROR='HTTP/1.1 500 Internal Server Error';
 
-    const DEFAULT_NAMESPACE='components/http/exception';
+    const DEFAULT_NAMESPACE='http/exception';
     const DEFAULT_ERROR_CODE=self::INTERNAL_SERVER_ERROR;
     //--------------------------------------------------------------------------
 
 
     // PROPERTIES
     public $code;
-    public $params=[];
     //--------------------------------------------------------------------------
 
 
     // CONSTRUCTION
     public function __construct($namespace_=self::DEFAULT_NAMESPACE,
-      $message_=null, $code_=self::DEFAULT_ERROR_CODE, array $params_=[],
-      $cause_=null, $logEnabled_=true)
+      $message_=null, $code_=self::DEFAULT_ERROR_CODE, $cause_=null, $logEnabled_=true)
     {
       if(null===$message_ && isset(self::$m_mapHttpErrorCodes[$code_]))
         $message_=self::$m_mapHttpErrorCodes[$code_];
@@ -48,45 +46,11 @@ namespace Components;
       parent::__construct($namespace_, $message_, $cause_, $logEnabled_);
 
       $this->code=$code_;
-      $this->params=$params_;
     }
     //--------------------------------------------------------------------------
 
 
     // STATIC ACCESSORS
-    /**
-     * @param string $namespace_
-     * @param string $message_
-     *
-     * @return \Components\Http_Exception
-     */
-    public static function notFound($namespace_, $message_=null)
-    {
-      return new static($namespace_, $message_, self::NOT_FOUND);
-    }
-
-    /**
-     * @param string $namespace_
-     * @param string $message_
-     *
-     * @return \Components\Http_Exception
-     */
-    public static function forbidden($namespace_, $message_=null)
-    {
-      return new static($namespace_, $message_, self::FORBIDDEN);
-    }
-
-    /**
-     * @param string $namespace_
-     * @param string $message_
-     *
-     * @return \Components\Http_Exception
-     */
-    public static function internalError($namespace_, $message_=null)
-    {
-      return new static($namespace_, $message_, self::INTERNAL_SERVER_ERROR);
-    }
-
     /**
      * Sends header: HTTP/1.1 404 Not Found
      */
@@ -238,17 +202,17 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private static $m_mapMimetypeSerializers=array(
+    private static $m_mapMimetypeSerializers=[
       'application/xml'=>'toXml',
       'application/json'=>'toJson',
       'text/html'=>'toHtml'
-    );
+    ];
 
-    private static $m_mapHttpErrorCodes=array(
+    private static $m_mapHttpErrorCodes=[
       self::INTERNAL_SERVER_ERROR=>self::MESSAGE_INTERNAL_SERVER_ERROR,
       self::FORBIDDEN=>self::MESSAGE_FORBIDDEN,
       self::NOT_FOUND=>self::MESSAGE_NOT_FOUND
-    );
+    ];
     //--------------------------------------------------------------------------
   }
 ?>

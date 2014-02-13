@@ -23,6 +23,7 @@ namespace Components;
       $instance=new static();
 
       $instance->addOption('u', true, null, 'dispatch uri', 'uri');
+      $instance->addOption('e', true, null, 'environment', 'env');
 
       $instance->addEmptyOption();
       $instance->addOption('h', false, null, 'print command line instructions', 'help');
@@ -59,6 +60,9 @@ namespace Components;
 
         return;
       }
+
+      if($this->hasArgument('env'))
+        Environment::push(Environment::valueOf($this->getArgument('env')));
 
       if($this->hasArgument('uri'))
       {

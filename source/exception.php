@@ -46,6 +46,10 @@ namespace Components;
       parent::__construct($namespace_, $message_, $cause_, $logEnabled_);
 
       $this->code=$code_;
+
+      header_register_callback(function() {
+        header($this->message, true, $this->code);
+      });
     }
     //--------------------------------------------------------------------------
 
@@ -82,10 +86,8 @@ namespace Components;
     {
       header($this->message, true, $this->code);
 
-      $verbose=Runtime::isManagementAccess() && Debug::active();
-
       if($previous=$this->getPrevious())
-        exception_header($previous, $verbose, $verbose);
+        exception_header($previous, $this->code);
     }
 
     /**
@@ -174,7 +176,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return object_hash($this);
+      return \math\hasho($this);
     }
 
     /**

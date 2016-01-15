@@ -90,11 +90,18 @@ namespace Components;
     public function setMethod($method_)
     {
       if(false===in_array($method_, self::$m_methods))
-        throw new Exception_IllegalArgument('components/http/scriptlet/request', 'Given argument must be a valid HTTP method.');
+      {
+        throw new Exception_IllegalArgument(
+          'components/http/scriptlet/request', 'Given argument must be a valid HTTP method.'
+        );
+      }
 
       $this->m_method=$method_;
     }
 
+    /**
+     * @return string
+     */
     public function getReferer()
     {
       if(null===$this->m_referer)
@@ -114,7 +121,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return object_hash($this);
+      return \math\hasho($this);
     }
 
     /**
@@ -148,14 +155,14 @@ namespace Components;
     /**
      * @var string[]
      */
-    private static $m_methods=array(
+    private static $m_methods=[
       self::METHOD_DELETE,
       self::METHOD_GET,
       self::METHOD_HEAD,
       self::METHOD_OPTIONS,
       self::METHOD_POST,
       self::METHOD_PUT
-    );
+    ];
 
     /**
      * @var \Components\Io_Mimetype

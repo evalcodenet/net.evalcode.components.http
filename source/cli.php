@@ -22,16 +22,18 @@ namespace Components;
     {
       $instance=new static();
 
+      $year=date('Y');
+      $version=(string)Runtime::version();
+
       $instance->addOption('u', true, null, 'dispatch uri', 'uri');
-      $instance->addOption('e', true, null, 'environment', 'env');
 
       $instance->addEmptyOption();
       $instance->addOption('h', false, null, 'print command line instructions', 'help');
       $instance->addOption('v', false, null, 'print program version & license', 'version');
 
       $instance->setInfo(sprintf('%1$s%3$s%2$s%3$s',
-        'Components Runtime HTTP Dispatcher 0.1, net.evalcode.components',
-        'Copyright (C) evalcode.net',
+        "Components Runtime HTTP Dispatcher $version, net.evalcode.components",
+        "Copyright (C) $year evalcode.net",
         Io::LINE_SEPARATOR_DEFAULT
       ));
 
@@ -60,9 +62,6 @@ namespace Components;
 
         return;
       }
-
-      if($this->hasArgument('env'))
-        Environment::push(Environment::valueOf($this->getArgument('env')));
 
       if($this->hasArgument('uri'))
       {

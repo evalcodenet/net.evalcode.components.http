@@ -80,20 +80,17 @@ namespace Components;
       }
       catch(\Exception $e)
       {
-        if(Environment::isCli())
+        if(Runtime::isCli())
           throw $e;
 
         Runtime::addException($e);
 
         if($e instanceof Http_Exception)
-        {
-          $e->log();
           $e->sendHeader();
-        }
       }
 
       // FIXME Why??
-      if(Environment::isCli())
+      if(Runtime::isCli())
       {
         echo ob_get_clean();
       }
@@ -137,6 +134,14 @@ namespace Components;
     }
 
     /**
+     * @return \Components\Http_Session
+     */
+    public function getSession()
+    {
+      return Http_Session::current();
+    }
+
+    /**
      * @return \Components\Uri
      */
     public function getContextUri()
@@ -155,11 +160,17 @@ namespace Components;
 
 
     // OVERRIDES
+    /**
+     * @see \Components\Object::hashCode() hashCode
+     */
     public function hashCode()
     {
-      return string_hash($this->m_contextRoot);
+      return \math\hashs($this->m_contextRoot);
     }
 
+    /**
+     * @see \Components\Object::equals() equals
+     */
     public function equals($object_)
     {
       if($object_ instanceof self)
@@ -168,6 +179,9 @@ namespace Components;
       return false;
     }
 
+    /**
+     * @see \Components\Object::__toString() __toString
+     */
     public function __toString()
     {
       return sprintf('%s@%s{contextRoot: %s}',
@@ -192,6 +206,7 @@ namespace Components;
      * @var \Components\Http_Scriptlet_Context
      */
     private static $m_current;
+
     /**
      * @var string
      */

@@ -40,43 +40,69 @@ namespace Components;
       $this->m_mimeType=$mimeType_;
     }
 
+    /**
+     * @return mixed[][]
+     */
     public function getParameters()
     {
       return $this->m_parameters;
     }
 
-    public function addParameter($name_, $value_)
+    /**
+     * @return mixed[]
+     */
+    public function getParameter($name_)
+    {
+      if(false===isset($this->m_parameters[$name_]))
+        return null;
+
+      return $this->m_parameters[$name_];
+    }
+
+    /**
+     * @param string $name_
+     * @param string $value_
+     */
+    public function setParameter($name_, $value_)
     {
       $this->m_parameters[$name_]=$value_;
     }
 
     /**
+     * @param string $name_
+     * @param string $key_
+     * @param string $value_
+     */
+    public function addParameter($name_, $key_, $value_)
+    {
+      if(false===isset($this->m_parameters[$name_]))
+        $this->m_parameters[$name_]=[];
+
+      $this->m_parameters[$name_][$key_]=$value_;
+    }
+
+    /**
      * @return boolean
      */
-    public function hasException()
+    public function hasExceptions()
     {
-      return null!==$this->m_exception;
+      return isset($this->m_parameters['e']);
     }
 
     /**
      * @return \Components\Http_Exception
      */
-    public function getException()
+    public function getExceptions()
     {
-      return $this->m_exception;
+      return $this->m_parameters['e'];
     }
 
     /**
-     * @param \Components\Http_Exception $exception_
+     * @return \Components\Http_Exception
      */
-    public function setException(Http_Exception $exception_)
+    public function addException(\Exception $exception_)
     {
-      $this->m_exception=$exception_;
-    }
-
-    public function unsetException()
-    {
-      $this->m_exception=null;
+      $this->m_parameters['e'][\math\hasho_md5($exception_)]=$exception_;
     }
     //--------------------------------------------------------------------------
 
@@ -87,7 +113,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return object_hash($this);
+      return \math\hasho($this);
     }
 
     /**
@@ -117,10 +143,6 @@ namespace Components;
 
     // IMPLEMENTATION
     private $m_parameters=[];
-    /**
-     * @var \Components\Http_Exception
-     */
-    private $m_exception;
     /**
      * @var \Components\Io_Mimetype
      */
